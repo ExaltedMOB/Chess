@@ -7,9 +7,8 @@ namespace Chess_team
         static void Main(string[] args)
         {
             char[,] board = new char[8, 8];
-            Fild();
         }
-        static void Fild()
+        static int[] ReturnChoosedCoordinate()
         {
             int hight = 2;
             int whight = 4;
@@ -20,6 +19,8 @@ namespace Chess_team
             int positionX = 1;
             int positionY = 1;
             TablePrint(hight, whight, gorisontNum, vertNum, gorisontPass, vertPass);
+            ReColour(positionX, positionY, gorisontPass, vertPass, hight, whight);
+            return InteractiveBoard(positionX, positionY, vertNum, gorisontNum, hight, whight, gorisontPass, vertPass);
         }
         static void TablePrint(int hight, int whight, int gorisontNum, int vertNum, int gorisontPass, int vertPass)
         {
@@ -86,6 +87,77 @@ namespace Chess_team
             {
                 Console.Write(i);
                 GorisontPassing(whide);
+            }
+        }
+        static void ReColour(int gorID, int vertID, int gorisontPass, int vertPass, int hight, int whight)
+        {
+            Console.SetCursorPosition(GetPosition(gorisontPass, gorID, whight), GetPosition(vertPass, vertID, hight));
+            Console.BackgroundColor = ConsoleColor.Red;
+            for (int i = 0; i < hight; i++)
+            {
+                Console.SetCursorPosition(GetPosition(gorisontPass, gorID, whight), GetPosition(vertPass, vertID, hight) + i);
+                for (int j = 0; j < whight; j++)
+                {
+                    Console.Write(" ");
+                }
+                if (i == (hight - 1)) Console.SetCursorPosition(GetPosition(gorisontPass, gorID, whight), GetPosition(vertPass, vertID, hight));
+            }
+            Console.BackgroundColor = ConsoleColor.Black;
+        }
+        static int GetPosition(int pass, int ID, int WH)
+        {
+            return (pass + 1 + (ID - 1) + ((ID - 1) * WH));
+        }
+        static int[] GetMoove(int positionX, int positionY, int hight, int whight)
+        {
+            int[] delta = new int[3];
+            if (Console.KeyAvailable)
+            {
+                ConsoleKeyInfo buttonPresed = Console.ReadKey();
+                if (buttonPresed.Key == ConsoleKey.RightArrow) delta[0] = 1;
+                if (buttonPresed.Key == ConsoleKey.LeftArrow) delta[0] = -1;
+                if (buttonPresed.Key == ConsoleKey.UpArrow) delta[1] = -1;
+                if (buttonPresed.Key == ConsoleKey.DownArrow) delta[1] = 1;
+                if (buttonPresed.Key == ConsoleKey.Enter) delta[2] = 1;
+            }
+            System.Threading.Thread.Sleep(25);
+            if (!IsMoveAvailable(positionX, positionY, hight, whight, delta)) 
+            {
+                delta[0] = 0;
+                delta[1] = 0;
+            }
+            return delta;
+        }
+        static bool IsMoveAvailable(int positionX, int positionY, int hight, int whight, int[] delta)
+        {
+            bool result = false;
+            if (positionX + delta[0] <= whight &&
+                positionY + delta[1] <= hight &&
+                positionX + delta[0] >= 1 &&
+                positionY + delta[1] >= 1)
+            {
+                result = true;
+            }
+            return result;
+        }
+        static int[] InteractiveBoard(int positionX, int positionY, int vertNum, int gorisontNum, int hight, int whight, int gorisontPass, int vertPass)
+        {
+            while (true)
+            {
+                int[] delta = GetMoove(positionX, positionY, vertNum, gorisontNum);
+                if (delta[0] != 0 || delta[1] != 0)
+                {
+                    positionX = positionX + delta[0];
+                    positionY = positionY + delta[1];
+                    TablePrint(hight, whight, gorisontNum, vertNum, gorisontPass, vertPass);
+                    ReColour(positionX, positionY, gorisontPass, vertPass, hight, whight);
+                    Console.SetCursorPosition(0, 0);
+                }
+                if (delta[2] == 1)
+                {
+                    return new int[] { positionX, positionY };
+                }
+                Console.SetCursorPosition(0, 0);
             }
         }
     }
