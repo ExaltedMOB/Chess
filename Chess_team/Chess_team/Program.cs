@@ -7,7 +7,6 @@ namespace Chess_team
         static void Main(string[] args)
         {
             char[,] board = new char[8, 8];
-            ReturnChoosedCoordinate();
         }
         static int[] ReturnChoosedCoordinate()
         {
