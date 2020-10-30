@@ -7,6 +7,7 @@ namespace Chess_team
         static void Main(string[] args)
         {
             char[,] board = new char[8, 8];
+            Fild();
         }
         static void Fild()
         {
@@ -23,7 +24,8 @@ namespace Chess_team
         static void TablePrint(int hight, int whight, int gorisontNum, int vertNum, int gorisontPass, int vertPass)
         {
             VertPassing(vertPass);
-            LinePrint(whight, gorisontNum, gorisontPass, "┌", "┬", "┐");
+            string[] fildCoordinate = new string[] { "A", "B", "C", "D", "E", "F", "G", "H" };
+            LinePrint(whight, gorisontNum, gorisontPass, "┌", "┬", "┐", fildCoordinate[0]);
             for (int i = 1; i <= vertNum; i++)
             {
                 for (int j = 0; j < hight; j++)
@@ -31,9 +33,10 @@ namespace Chess_team
                     GorisontPassing(gorisontPass);
                     WhitespacePrint(whight, gorisontNum, gorisontPass);
                 }
-                if (i != vertNum) LinePrint(whight, gorisontNum, gorisontPass, "├", "┼", "┤");
+                if (i != vertNum) LinePrint(whight, gorisontNum, gorisontPass, "├", "┼", "┤", fildCoordinate[i]);
             }
-            LinePrint(whight, gorisontNum, gorisontPass, "└", "┴", "┘");
+            LinePrint(whight, gorisontNum, gorisontPass, "└", "┴", "┘", "");
+            PrintChessNumCoordinate(whight, gorisontPass);
         }
         static void GorisontPassing(int gorPass)
         {
@@ -49,7 +52,7 @@ namespace Chess_team
                 Console.WriteLine();
             }
         }
-        static void LinePrint(int whight, int GorisontNum, int GorisontPass, string LineStart, string LineInside, string LineEnd)
+        static void LinePrint(int whight, int GorisontNum, int GorisontPass, string LineStart, string LineInside, string LineEnd, string fildCoordinate)
         {
             GorisontPassing(GorisontPass);
             Console.Write(LineStart);
@@ -61,7 +64,8 @@ namespace Chess_team
                 }
                 if (i != GorisontNum) Console.Write(LineInside);
             }
-            Console.WriteLine(LineEnd);
+            Console.Write(LineEnd);
+            Console.WriteLine(fildCoordinate);
         }
         static void WhitespacePrint(int whight, int GorisontNum, int GorisontPass)
         {
@@ -74,6 +78,15 @@ namespace Chess_team
                 }
             }
             Console.WriteLine("│");
+        }
+        static void PrintChessNumCoordinate(int whide, int gorisontPass)
+        {
+            GorisontPassing(gorisontPass);
+            for (int i = 1 ; i <= 8; i++)
+            {
+                Console.Write(i);
+                GorisontPassing(whide);
+            }
         }
     }
 }
