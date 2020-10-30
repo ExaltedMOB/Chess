@@ -7,6 +7,7 @@ namespace Chess_team
         static void Main(string[] args)
         {
             char[,] board = new char[8, 8];
+            ReturnChoosedCoordinate();
         }
         static int[] ReturnChoosedCoordinate()
         {
@@ -103,6 +104,7 @@ namespace Chess_team
                 if (i == (hight - 1)) Console.SetCursorPosition(GetPosition(gorisontPass, gorID, whight), GetPosition(vertPass, vertID, hight));
             }
             Console.BackgroundColor = ConsoleColor.Black;
+            Console.SetCursorPosition(0, 0);
         }
         static int GetPosition(int pass, int ID, int WH)
         {
@@ -157,7 +159,6 @@ namespace Chess_team
                 {
                     return new int[] { positionX, positionY };
                 }
-                Console.SetCursorPosition(0, 0);
             }
         }
     }
