@@ -8,7 +8,7 @@ namespace Chess_team
         {
             char[,] board = new char[8, 8];
         }
-        static int[] ReturnChoosedCoordinate()
+        static int[] ReturnChoosedCoordinate(char[,] figers)
         {
             int hight = 2;
             int whight = 4;
@@ -21,7 +21,8 @@ namespace Chess_team
             TablePrint(hight, whight, gorisontNum, vertNum, gorisontPass, vertPass);
             DoBoardColourfull(gorisontPass, vertPass, hight, whight);
             ReColour(positionX, positionY, gorisontPass, vertPass, hight, whight, ConsoleColor.Red);
-            return InteractiveBoard(positionX, positionY, vertNum, gorisontNum, hight, whight, gorisontPass, vertPass);
+            SetFigurs(figers, hight, whight, gorisontPass, vertPass);
+            return InteractiveBoard(positionX, positionY, vertNum, gorisontNum, hight, whight, gorisontPass, vertPass, figers);
         }
         static void TablePrint(int hight, int whight, int gorisontNum, int vertNum, int gorisontPass, int vertPass)
         {
@@ -142,7 +143,7 @@ namespace Chess_team
             }
             return result;
         }
-        static int[] InteractiveBoard(int positionX, int positionY, int vertNum, int gorisontNum, int hight, int whight, int gorisontPass, int vertPass)
+        static int[] InteractiveBoard(int positionX, int positionY, int vertNum, int gorisontNum, int hight, int whight, int gorisontPass, int vertPass, char[,] figers)
         {
             while (true)
             {
@@ -154,6 +155,7 @@ namespace Chess_team
                     TablePrint(hight, whight, gorisontNum, vertNum, gorisontPass, vertPass);
                     DoBoardColourfull(gorisontPass, vertPass, hight, whight);
                     ReColour(positionX, positionY, gorisontPass, vertPass, hight, whight, ConsoleColor.Red);
+                    SetFigurs(figers, hight, whight, gorisontPass, vertPass);
                     Console.SetCursorPosition(0, 0);
                 }
                 if (delta[2] == 1)
@@ -171,6 +173,23 @@ namespace Chess_team
                     if ((i + j) % 2 != 0) ReColour(i + 1, j + 1, gorisontPass, vertPass, hight, whight, ConsoleColor.Gray);
                 }
             }
+        }
+        static void SetFigurs(char[,] figers, int hight, int whightint, int gorisontPass, int vertPass)
+        {
+            Console.ForegroundColor = ConsoleColor.Blue;
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (figers[i,j] != '0')
+                    {
+                        Console.SetCursorPosition(GetPosition(gorisontPass, j + 1, whightint) + whightint/2, GetPosition(vertPass, i + 1, hight) + hight/2);
+                        Console.Write(figers[i, j]);
+                    }
+                }
+            }
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.SetCursorPosition(0, 0);
         }
     }
 }
