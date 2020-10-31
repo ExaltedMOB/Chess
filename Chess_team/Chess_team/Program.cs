@@ -7,6 +7,7 @@ namespace Chess_team
         static void Main(string[] args)
         {
             char[,] board = new char[8, 8];
+            ReturnChoosedCoordinate();
         }
         static int[] ReturnChoosedCoordinate()
         {
@@ -19,14 +20,14 @@ namespace Chess_team
             int positionX = 1;
             int positionY = 1;
             TablePrint(hight, whight, gorisontNum, vertNum, gorisontPass, vertPass);
-            ReColour(positionX, positionY, gorisontPass, vertPass, hight, whight);
+            DoBoardColourfull(gorisontPass, vertPass, hight, whight);
+            ReColour(positionX, positionY, gorisontPass, vertPass, hight, whight, ConsoleColor.Red);
             return InteractiveBoard(positionX, positionY, vertNum, gorisontNum, hight, whight, gorisontPass, vertPass);
         }
         static void TablePrint(int hight, int whight, int gorisontNum, int vertNum, int gorisontPass, int vertPass)
         {
             VertPassing(vertPass);
-            string[] fildCoordinate = new string[] { "A", "B", "C", "D", "E", "F", "G", "H" };
-            LinePrint(whight, gorisontNum, gorisontPass, "┌", "┬", "┐", fildCoordinate[0]);
+            LinePrint(whight, gorisontNum, gorisontPass, "┌", "┬", "┐", 1.ToString());
             for (int i = 1; i <= vertNum; i++)
             {
                 for (int j = 0; j < hight; j++)
@@ -34,7 +35,7 @@ namespace Chess_team
                     GorisontPassing(gorisontPass);
                     WhitespacePrint(whight, gorisontNum, gorisontPass);
                 }
-                if (i != vertNum) LinePrint(whight, gorisontNum, gorisontPass, "├", "┼", "┤", fildCoordinate[i]);
+                if (i != vertNum) LinePrint(whight, gorisontNum, gorisontPass, "├", "┼", "┤", (i + 1).ToString());
             }
             LinePrint(whight, gorisontNum, gorisontPass, "└", "┴", "┘", "");
             PrintChessNumCoordinate(whight, gorisontPass);
@@ -82,17 +83,18 @@ namespace Chess_team
         }
         static void PrintChessNumCoordinate(int whide, int gorisontPass)
         {
-            GorisontPassing(gorisontPass);
-            for (int i = 1 ; i <= 8; i++)
+            string[] fildCoordinate = new string[] { "A", "B", "C", "D", "E", "F", "G", "H" };
+            GorisontPassing(gorisontPass +(whide/2));
+            for (int i = 0 ; i < 8; i++)
             {
-                Console.Write(i);
+                Console.Write(fildCoordinate[i]);
                 GorisontPassing(whide);
             }
         }
-        static void ReColour(int gorID, int vertID, int gorisontPass, int vertPass, int hight, int whight)
+        static void ReColour(int gorID, int vertID, int gorisontPass, int vertPass, int hight, int whight, ConsoleColor colour)
         {
             Console.SetCursorPosition(GetPosition(gorisontPass, gorID, whight), GetPosition(vertPass, vertID, hight));
-            Console.BackgroundColor = ConsoleColor.Red;
+            Console.BackgroundColor = colour;
             for (int i = 0; i < hight; i++)
             {
                 Console.SetCursorPosition(GetPosition(gorisontPass, gorID, whight), GetPosition(vertPass, vertID, hight) + i);
@@ -151,12 +153,23 @@ namespace Chess_team
                     positionX = positionX + delta[0];
                     positionY = positionY + delta[1];
                     TablePrint(hight, whight, gorisontNum, vertNum, gorisontPass, vertPass);
-                    ReColour(positionX, positionY, gorisontPass, vertPass, hight, whight);
+                    DoBoardColourfull(gorisontPass, vertPass, hight, whight);
+                    ReColour(positionX, positionY, gorisontPass, vertPass, hight, whight, ConsoleColor.Red);
                     Console.SetCursorPosition(0, 0);
                 }
                 if (delta[2] == 1)
                 {
                     return new int[] { positionX, positionY };
+                }
+            }
+        }
+        static void DoBoardColourfull(int gorisontPass, int vertPass, int hight, int whight)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if ((i + j) % 2 != 0) ReColour(i + 1, j + 1, gorisontPass, vertPass, hight, whight, ConsoleColor.Gray);
                 }
             }
         }
